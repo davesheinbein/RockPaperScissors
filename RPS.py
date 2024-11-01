@@ -1,10 +1,29 @@
-# The example function below keeps track of the opponent's history and plays whatever the opponent played two plays ago. It is not a very good player so you will need to change the code to pass the challenge.
+import random
 
 def player(prev_play, opponent_history=[]):
     opponent_history.append(prev_play)
 
-    guess = "R"
-    if len(opponent_history) > 2:
-        guess = opponent_history[-2]
+    # If it's the first play, choose Rock
+    if not prev_play:
+        return "R"
 
-    return guess
+    # Count frequencies of last few moves
+    move_count = {'R': 0, 'P': 0, 'S': 0}
+
+    # Count the last 5 moves
+    for move in opponent_history[-5:]:
+        if move:
+            move_count[move] += 1
+
+    # Determine the most frequent move
+    most_frequent_move = max(move_count, key=move_count.get)
+
+    # Counter the most frequent move
+    counter_move = {
+        'R': 'P',  # Paper beats Rock
+        'P': 'S',  # Scissors beat Paper
+        'S': 'R'   # Rock beats Scissors
+    }
+
+    # Return the counter move for the most frequent play
+    return counter_move[most_frequent_move]
